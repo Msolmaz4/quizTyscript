@@ -1,47 +1,72 @@
-//import Card from "./components/Card";
-import { fetchQuizQuestions } from './Api'
-import {useState} from 'react'
-import { Difficulty } from './Api'
+
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Card from "./components/Card";
+
+type ApiResponse = {
+  results: {
+    category: string;
+    correct_answer: string;
+    difficulty: string;
+    incorrect_answers: string[];
+    question: string;
+    type: string;
+  }[];
+};
+
 
 
 function App() {
- const [ loading,setLoading] = useState(false)
- const [ questions,setQuestions] = useState([])
- const [ number,setNumber] = useState(0)
- const [ userAnswers,setUserAnswers] = useState([])
- const [ score,setScore] = useState(0)
- const [ gameOver,setGameOver] = useState(true)
- const TOTAL_QUESTIONS = 10
+  const [question,setQuestion] = useState<ApiResponse['results']>([])
+  const [anfag,setAnfag] = useState<Boolean>(false)
 
- console.log(fetchQuizQuestions(TOTAL_QUESTIONS,Difficulty.EASY))
 
-  const startTrvia = async()=>{}
 
-  const check =(e:React.MouseEvent<HTMLButtonElement>) => {
 
+ 
+
+useEffect(()=>{
+  const cagr =async ()=>{
+       const data = await axios.get('https://opentdb.com/api.php?amount=10&category=21&difficulty=easy&type=multiple')
+       //console.log(data.data.results)
+       setQuestion(data.data.results)
   }
-  const nextQuestion = ()=>{
+  cagr()
+},[])
 
-  }
+const start = ()=>{
+  const updated =  question.map((question) => ({
+    ...question,
+    sonl: question.incorrect_answers.concat(question.correct_answer),
+  }));
+
+
+  setQuestion(updated);
+  setAnfag(true)
+
+}
+  //console.log(question,'start')
+
+
+
+
+
+
  return (
   <div>
      
      <h1>REACT QUIZ</h1>
-     <button className="start" onClick={startTrvia}>Start</button>
+     {
+      !anfag ? ( 
+        <div>       <button className="start" onClick={start}>Start</button>
      <p className="score">Score:</p>
      <p>Loading Question......</p>
-     {/* <Card
-     questionNr = {number+1}
-     totalQuestions={TOTAL_QUESTIONS}
-     question={questions[number].question}
-     answers={questions[number].answers}
-     userAnswers={userAnswers ? userAnswers[number] :undefined}
-     callback={check}
-
      
-     
-     /> */}
-     <button className="next" onClick={nextQuestion}>Next Question</button>
+    </div>
+   
+      ):(   <Card questions={question} />)
+     }
+   
 
   </div>)
 }
