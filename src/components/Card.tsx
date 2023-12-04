@@ -15,6 +15,7 @@ const Card: React.FC<{ questions: QuestionProps }> = ({ questions }) => {
 
   const [count, setCount] = useState<number>(0);
   const [back, setBack] = useState<boolean>(false);
+  const [core,setCore] = useState<number>(0)
 
   const artis = () => {
     if (count < 9) {
@@ -29,6 +30,8 @@ const Card: React.FC<{ questions: QuestionProps }> = ({ questions }) => {
     console.log(gel);
     if (gel === questions[count].correct_answer) {
       setBack(true);
+      setCore((prev) => prev + 1);
+
     } else {
       console.log("hatali");
     }
@@ -37,6 +40,7 @@ const Card: React.FC<{ questions: QuestionProps }> = ({ questions }) => {
 
   return (
     <div>
+     
       <div>soru:{count}</div>
       <div>{questions[count].question}</div>
       <ul>
@@ -50,9 +54,11 @@ const Card: React.FC<{ questions: QuestionProps }> = ({ questions }) => {
           </div>
         ))}
       </ul>
-
-      
+<div style={{display:'flex' ,justifyContent:'center',alignItems:'center'}}>
+    <div style={{border:'2px solid red', width:'60px', height:'50px', display:'flex', justifyContent:'center',borderRadius:'100%',alignItems:'center'}}>{core}/10</div>
     </div>
+</div>
+     
   );
 };
 
