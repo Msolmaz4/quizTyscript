@@ -7,40 +7,51 @@ type QuestionProps = {
   incorrect_answers: string[];
   question: string;
   type: string;
+  count:number;
+ 
 };
 const Card: React.FC<{ questions: QuestionProps }> = ({ questions }) => {
   console.log(questions);
- 
+
   const [count, setCount] = useState<number>(0);
+  const [back, setBack] = useState<boolean>(false);
+
   const artis = () => {
-    setCount(prev=>prev+1)
-  
+    if (count < 9) {
+      console.log(count);
+      setCount((prev) => prev + 1);
+    } else {
+      alert("fertig");
+      window.location = "/";
+    }
   };
-  
+  const derleme = (gel: string, count: number) => {
+    console.log(gel);
+    if (gel === questions[count].correct_answer) {
+      setBack(true);
+    } else {
+      console.log("hatali");
+    }
+    artis ()
+  };
 
   return (
     <div>
       <div>soru:{count}</div>
-      <div>{questions[count].question
-}</div>
-<ul>
-{
- questions[count].sonl.map((item)=>(
-  <div onClick={()=>{
-   if(item === questions[count].correct_answer){
-    console.log('first')
-   }
-   else console.log('hatali')
-  }}> 
-     <li>{item}</li>
-  </div>
- 
- ))
-}
-</ul>
- 
+      <div>{questions[count].question}</div>
+      <ul>
+        {questions[count].sonl.map((item) => (
+          <div
+            onClick={() => {
+              derleme(item, count);
+            }}
+          >
+            <li>{item}</li>
+          </div>
+        ))}
+      </ul>
 
-      <button onClick={artis}>next</button>
+      
     </div>
   );
 };
